@@ -1,0 +1,29 @@
+queue               = C:DECLARE S:DECLARE-OK / C:BIND S:BIND-OK / C:UNBIND S:UNBIND-OK / C:PURGE S:PURGE-OK / C:DELETE S:DELETE-OK
+
+
+class-id                = %x00.32
+method-payload          = class-id method-id method-properties
+; entries starting with <"m" %d0-%d99 "-"> are to substitute existing fields in the overall grammar for the method of id equal to the numerical part of the prefix
+
+
+m10-method-id           = %d10
+m10-method-properties   = %x00.00 queue-name m10-bit-field arguments
+m10-bit-field           = passive durable exclusive auto-delete no-wait
+
+m20-method-id           = %d20
+m20-method-properties   = active
+
+m21-method-id           = %d21
+m21-method-properties   = active
+
+m40-method-id           = %d40
+m40-method-properties   = reply-code reply-text class-id method-id
+
+m41-method-id           = %d41
+
+queue-name              = ???
+passive                 = BIT ; TODO: figure out how to do 
+durable                 = BIT
+exclusive               = BIT
+auto-delete             = BIT
+no-wait                 = BIT

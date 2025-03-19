@@ -1,0 +1,65 @@
+connection              = open-connection *use-connection close-connection
+open-connection         = C:protocol-header S:START C:START-OK *challenge S:TUNE C:TUNE-OK C:OPEN S:OPEN-OK
+challenge               = S:SECURE C:SECURE-OK
+use-connection          = C:CLOSE S:CLOSE-OK
+close-connection        = C:CLOSE S:CLOSE-OK / S:CLOSE C:CLOSE-OK
+
+method                  = method-frame
+channel                 = %x00.00
+class-id                = %x00.0A
+method-payload          = class-id method-id method-properties
+
+; entries starting with <"m" %d0-%d99 "-"> are to substitute existing fields in the overall grammar for the method of id equal to the numerical part of the prefix
+
+
+m11-method-id           = %x00.0B
+m11-method-properties = client-properties mechanism response locale
+client-properties = client-properties-length client-properties-payload
+
+; client-properties-payload = %d07 "product" %x53 product-value %d07 "version" %x53 version-value %d08 "platform" %x53 platform-value
+
+client-properties-payload = %x00.56
+
+product-value           = long-string
+version-value           = long-string
+platform-value          = long-string
+
+mechanism = %d5 %x50.4C.41.49.4E ; PLAIN
+response = message-length message
+locale = %d5 %x65.6E.5F.55.53 ; en_US
+
+m31-method-id           = %x00.1F
+m31-method-properties   = channel-max frame-max heartbeat-time
+channel-max             = short-int
+frame-max               = long-int
+heartbeat-time          = short-int 
+
+m40-method-id           = %x00.28
+m40-method-properties   = virtual-host %d0 %d0
+
+m50-method-id           = %x00.32
+m50-method-properties   = reply-code reply-text m50-class-id-val m50-method-id-val
+m50-class-id-val        = class-id  ; To be overwritten
+m50-method-id-val       = method-id ; To be overwritten
+reply-code              = short-int
+reply-text              = shortstr
+
+m51-method-id           = %x00.33
+
+
+; RFC4616 : PLAIN
+
+message   = [authzid] UTF8NUL authcid UTF8NUL passwd ;
+authcid   = 1*SAFE ; MUST accept up to 255 octets
+authzid   = 1*SAFE ; MUST accept up to 255 octets
+passwd    = 1*SAFE ; MUST accept up to 255 octets
+UTF8NUL   = %x00 ; UTF-8 encoded NUL character
+
+SAFE      = UTF1 / UTF2 / UTF3 / UTF4
+            ;; any UTF-8 encoded Unicode character except NUL
+
+UTF1      = %x01-7F ;; except NUL
+UTF2      = %xC2-DF UTF0
+UTF3      = %xE0 %xA0-BF UTF0 / %xE1-EC 2UTF0 / %xED %x80-9F UTF0 / %xEE-EF 2UTF0
+UTF4      = %xF0 %x90-BF 2UTF0 / %xF1-F3 3UTF0 / %xF4 %x80-8F 2UTF0
+UTF0      = %x80-BF

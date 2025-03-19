@@ -1,0 +1,5 @@
+*.o
+*.out
+*.a
+ntfy_url
+*.sh

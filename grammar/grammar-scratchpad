@@ -1,0 +1,34 @@
+; begin
+    Gramática  disponível na seção 4 da especificação
+
+
+end
+
+
+
+<start>             ::= <packets>
+<packets>           ::= <protocol-header>
+                     |  <protocol-packet>
+<protocol-header>   ::= AMQP\x00\x00\x09\x01
+<protocol-packet>   ::= <type>
+                        <channel>
+                        <length>
+                        <payload>
+                        <frame-end>
+<type>              ::= 1                                           ; Method
+                     |  2                                           ; Header
+                     |  3                                           ; Body
+                     |  4                                           ; Heartbeat
+<channel>           ::= ...
+<length>            ::= 'length of the associated payload in bytes'
+<payload>           ::= <method-frame>
+                     |  <content-header>
+                     |  <content-payload>
+                     |  <heartbeat>
+<method-frame>      ::= <class-id>
+                        <method-id>
+                        <method-arguments>
+<class-id>          ::= ...
+<method-id>         ::= ...
+<method-arguments>  ::= essa aqui vai dar um trabalhão se pa?
+
