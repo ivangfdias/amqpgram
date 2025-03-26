@@ -43,4 +43,5 @@ Packet Chaos progresses the same way, but for generating packets appropriate to 
 
 ## Academic Information
 
-This software is being developed as part of an Institutional Scientific Initiation Scholarship Program (PIBIC) project, and would not exist without the help and financing of the National Council for Scientific and Technological Development.
+This software is being developed as part of an Institutional Scientific Initiation Scholarship Program (PIBIC) project, and would not exist without the help and funding of the National Council for Scientific and Technological Development.
+Specifically, this software is funded by CNPq proc. 129028/2024-0.
